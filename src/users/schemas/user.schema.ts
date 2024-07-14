@@ -41,3 +41,12 @@ UserSchema.pre('save', async function (next) {
     user.password = await bcrypt.hash(user.password, salt)
     next()
 })
+
+UserSchema.pre('findOneAndUpdate', async function (next) {
+    const update = this.getUpdate()
+    if (update && typeof update === 'object' && 'password' in update) {
+        const salt = await bcrypt.genSalt(10);
+        (update as any).password = await bcrypt.hash(update.password, salt)
+    }
+    next();
+})

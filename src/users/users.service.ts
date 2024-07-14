@@ -25,19 +25,15 @@ export class UsersService {
     return { users, total }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`
-  }
-
   async findOneByUsernameAuth(username: string) {
     return await this.userModel.findOne({ username }).select('+password').exec()
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto).exec()
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`
+  async remove(id: string) {
+    return await this.userModel.findByIdAndDelete(id).exec()
   }
 }
